@@ -1,0 +1,33 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build project",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "DAO/Users/UsersDAO.cpp",
+                "DAO/Calendar/CalendarDAO.cpp",
+                "DAO/Exercises/ExercisesDAO.cpp",
+                "DAO/ExercisesEntry/ExercisesEntryDAO.cpp",
+                "DAO/Program/ProgramDAO.cpp",
+                "DAO/Progress/ProgressDAO.cpp",
+                "DAO/ProgramTrainingDay/ProgramTrainingDayDAO.cpp",
+                "DAO/ProgramTrainingDay/ProgramTrainingDayDAO.cpp",
+                "DAO/Workout/WorkoutDAO.cpp",
+                "-Ilibs",             
+                "-IDAO",              
+                "-Llibs",            
+                "-lsqlite3",         
+                "-std=c++17",
+                "-o",
+                "ProjectTrainer.exe"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        }
+    ]
+}
