@@ -34,7 +34,7 @@ bool ProgramTrainingDayDAO::deleteLink(int program_id, int training_day_id) {
     return ok;
 }
 
-std::vector<ProgramTrainingDay> ProgramTrainingDayDAO::getLinksByProgram(int program_id) {
+std::vector<ProgramTrainingDay> ProgramTrainingDayDAO::getLinksByProgram(int program_id) const {
     std::vector<ProgramTrainingDay> result;
     const char* sql = "SELECT program_id, training_day_id FROM ProgramTrainingDay WHERE program_id=?;";
     sqlite3_stmt* stmt;
