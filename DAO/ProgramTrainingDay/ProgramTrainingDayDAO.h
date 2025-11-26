@@ -18,7 +18,7 @@ public:
 
     bool addLink(const ProgramTrainingDay& link);
     bool deleteLink(int program_id, int training_day_id);
-    std::vector<ProgramTrainingDay> getLinksByProgram(int program_id);
+    std::vector<ProgramTrainingDay> getLinksByProgram(int program_id) const;
 };
 
 #endif
