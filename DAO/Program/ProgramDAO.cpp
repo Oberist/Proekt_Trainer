@@ -23,7 +23,7 @@ bool ProgramDAO::addProgram(const Program& p) {
     return ok;
 }
 
-Program ProgramDAO::getProgramById(int id) {
+Program ProgramDAO::getProgramById(int id) const {
     Program p{};
     const char* sql = "SELECT * FROM Program WHERE id=?;";
     sqlite3_stmt* stmt;
@@ -39,7 +39,7 @@ Program ProgramDAO::getProgramById(int id) {
     return p;
 }
 
-std::vector<Program> ProgramDAO::getAllPrograms() {
+std::vector<Program> ProgramDAO::getAllPrograms() const {
     std::vector<Program> result;
     const char* sql = "SELECT * FROM Program;";
     sqlite3_stmt* stmt;
