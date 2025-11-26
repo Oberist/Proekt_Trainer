@@ -28,7 +28,7 @@ bool ExercisesEntryDAO::addEntry(const ExercisesEntry& entry) {
     return ok;
 }
 
-ExercisesEntry ExercisesEntryDAO::getEntryById(int id) {
+ExercisesEntry ExercisesEntryDAO::getEntryById(int id) const {
     ExercisesEntry e{};
     const char* sql = "SELECT * FROM ExercisesEntry WHERE id=?;";
     sqlite3_stmt* stmt;
@@ -48,7 +48,7 @@ ExercisesEntry ExercisesEntryDAO::getEntryById(int id) {
     return e;
 }
 
-std::vector<ExercisesEntry> ExercisesEntryDAO::getEntriesByTrainingDay(int training_day_id) {
+std::vector<ExercisesEntry> ExercisesEntryDAO::getEntriesByTrainingDay(int training_day_id) const {
     std::vector<ExercisesEntry> result;
     const char* sql = "SELECT * FROM ExercisesEntry WHERE training_day_id=?;";
     sqlite3_stmt* stmt;
