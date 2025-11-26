@@ -24,8 +24,8 @@ public:
     ~ExercisesEntryDAO();
 
     bool addEntry(const ExercisesEntry& entry);
-    ExercisesEntry getEntryById(int id);
-    std::vector<ExercisesEntry> getEntriesByTrainingDay(int training_day_id);
+    ExercisesEntry getEntryById(int id) const;
+    std::vector<ExercisesEntry> getEntriesByTrainingDay(int training_day_id) const;
     bool updateEntry(const ExercisesEntry& entry);
     bool deleteEntry(int id);
 };
