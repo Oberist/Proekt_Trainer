@@ -19,8 +19,8 @@ public:
     ~ProgramDAO();
 
     bool addProgram(const Program& p);
-    Program getProgramById(int id);
-    std::vector<Program> getAllPrograms();
+    Program getProgramById(int id) const;
+    std::vector<Program> getAllPrograms() const;
     bool updateProgram(const Program& p);
     bool deleteProgram(int id);
 };
