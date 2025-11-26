@@ -9,8 +9,59 @@
       "intelliSenseMode": "windows-gcc-x64",
       "includePath": [
         "${workspaceFolder}/**",
-        "C:\\Users\\newca\\Desktop\\ProjectTrainer\\libs"
-      ]
+        "${workspaceFolder}/libs",
+        "${workspaceFolder}/VectorData",
+        "${workspaceFolder}/Models",
+        "${workspaceFolder}/Database",
+        "${workspaceFolder}/DAO",
+        "${workspaceFolder}/DAO/Calendar",
+        "${workspaceFolder}/DAO/Exercise",
+        "${workspaceFolder}/DAO/ExercisesEntry",
+        "${workspaceFolder}/DAO/Program",
+        "${workspaceFolder}/DAO/ProgramTrainingDay",
+        "${workspaceFolder}/DAO/Progress",
+        "${workspaceFolder}/DAO/TrainingDay",
+        "${workspaceFolder}/DAO/Users",
+        "${workspaceFolder}/DAO/Workout",
+        "${workspaceFolder}/Managers",
+        "${workspaceFolder}/Managers/ExerciseManager",
+        "${workspaceFolder}/Managers/ExerciseEntryManager",
+        "${workspaceFolder}/Managers/TrainingDayManager",
+        "${workspaceFolder}/Managers/ProgramManager",
+        "${workspaceFolder}/Managers/UserManager",
+        "${workspaceFolder}/Managers/WorkoutManager",
+        "${workspaceFolder}/Managers/ProgressManager",
+        "C:/msys64/ucrt64/include"
+      ],
+      "browse": {
+        "path": [
+          "${workspaceFolder}/**",
+          "${workspaceFolder}/libs",
+          "${workspaceFolder}/VectorData",
+          "${workspaceFolder}/Models",
+          "${workspaceFolder}/Database",
+          "${workspaceFolder}/DAO",
+          "${workspaceFolder}/DAO/Calendar",
+          "${workspaceFolder}/DAO/Exercise",
+          "${workspaceFolder}/DAO/ExercisesEntry",
+          "${workspaceFolder}/DAO/Program",
+          "${workspaceFolder}/DAO/ProgramTrainingDay",
+          "${workspaceFolder}/DAO/Progress",
+          "${workspaceFolder}/DAO/TrainingDay",
+          "${workspaceFolder}/DAO/Users",
+          "${workspaceFolder}/DAO/Workout",
+          "${workspaceFolder}/Managers",
+          "${workspaceFolder}/Managers/ExerciseManager",
+          "${workspaceFolder}/Managers/ExerciseEntryManager",
+          "${workspaceFolder}/Managers/TrainingDayManager",
+          "${workspaceFolder}/Managers/ProgramManager",
+          "${workspaceFolder}/Managers/UserManager",
+          "${workspaceFolder}/Managers/WorkoutManager",
+          "${workspaceFolder}/Managers/ProgressManager",
+          "C:/msys64/ucrt64/include"
+        ],
+        "limitSymbolsToIncludedHeaders": true
+      }
     }
   ],
   "version": 4

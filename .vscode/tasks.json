@@ -1,33 +1,70 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "build project",
-            "type": "shell",
-            "command": "g++",
-            "args": [
-                "DAO/Users/UsersDAO.cpp",
-                "DAO/Calendar/CalendarDAO.cpp",
-                "DAO/Exercises/ExercisesDAO.cpp",
-                "DAO/ExercisesEntry/ExercisesEntryDAO.cpp",
-                "DAO/Program/ProgramDAO.cpp",
-                "DAO/Progress/ProgressDAO.cpp",
-                "DAO/ProgramTrainingDay/ProgramTrainingDayDAO.cpp",
-                "DAO/ProgramTrainingDay/ProgramTrainingDayDAO.cpp",
-                "DAO/Workout/WorkoutDAO.cpp",
-                "-Ilibs",             
-                "-IDAO",              
-                "-Llibs",            
-                "-lsqlite3",         
-                "-std=c++17",
-                "-o",
-                "ProjectTrainer.exe"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": ["$gcc"]
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "compile sqlite3",
+      "type": "shell",
+      "command": "gcc",
+      "args": [
+        "-c",
+        "${workspaceFolder}/libs/sqlite3.c",
+        "-o",
+        "${workspaceFolder}/libs/sqlite3.o",
+        "-std=c17"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "build project",
+      "type": "shell",
+      "command": "g++",
+      "dependsOn": ["compile sqlite3"],
+      "args": [
+        "${workspaceFolder}/main.cpp",
+        "${workspaceFolder}/DAO/Users/UsersDAO.cpp",
+        "${workspaceFolder}/DAO/Calendar/CalendarDAO.cpp",
+        "${workspaceFolder}/DAO/Exercise/ExerciseDAO.cpp",
+        "${workspaceFolder}/DAO/ExercisesEntry/ExercisesEntryDAO.cpp",
+        "${workspaceFolder}/DAO/Program/ProgramDAO.cpp",
+        "${workspaceFolder}/DAO/ProgramTrainingDay/ProgramTrainingDayDAO.cpp",
+        "${workspaceFolder}/DAO/Progress/ProgressDAO.cpp",
+        "${workspaceFolder}/DAO/TrainingDay/TrainingDayDAO.cpp",
+        "${workspaceFolder}/DAO/Workout/WorkoutDAO.cpp",
+        "${workspaceFolder}/Managers/ExerciseManager/ExerciseManager.cpp",
+        "${workspaceFolder}/Managers/ExerciseEntryManager/ExerciseEntryManager.cpp",
+        "${workspaceFolder}/Managers/TrainingDayManager/TrainingDayManager.cpp",
+        "${workspaceFolder}/Managers/ProgramManager/ProgramManager.cpp",
+        "${workspaceFolder}/Managers/UserManager/UserManager.cpp",
+        "${workspaceFolder}/Managers/WorkoutManager/WorkoutManager.cpp",
+        "${workspaceFolder}/Managers/ProgressManager/ProgressManager.cpp",
+        "${workspaceFolder}/VectorData/VectorDAO.cpp",
+        "${workspaceFolder}/VectorData/embedding.cpp",
+        "${workspaceFolder}/VectorData/vector_test.cpp",
+        "${workspaceFolder}/Database/database.cpp",
+        "${workspaceFolder}/Models/model_placeholder.cpp",
+        "${workspaceFolder}/libs/sqlite3.o",
+        "-I${workspaceFolder}/libs",
+        "-I${workspaceFolder}/DAO",
+        "-I${workspaceFolder}/DAO/Workout",
+        "-I${workspaceFolder}/Managers",
+        "-I${workspaceFolder}/Models",
+        "-I${workspaceFolder}/Database",
+        "-I${workspaceFolder}/VectorData",
+        "-std=c++17",
+        "-o",
+        "${workspaceFolder}/ProjectTrainer.exe"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gcc"]
+    }
+  ]
 }
