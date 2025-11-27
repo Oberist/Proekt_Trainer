@@ -10,12 +10,15 @@ class VectorDAO {
 private:
     std::string indexPath;
     std::size_t dim;
+    size_t maxElements;
     hnswlib::HierarchicalNSW<float>* index;
     hnswlib::SpaceInterface<float>* space;
     sqlite3* db;
 
+    std::string metaPath() const;
+
 public:
-    VectorDAO(const std::string& dbPath, const std::string& indexPath, int dim = -1);
+    VectorDAO(const std::string& dbPath, const std::string& indexPath, int dim = -1, size_t maxElements = 10000);
     ~VectorDAO();
 
     bool addVectorText(int64_t id, const std::string& text);
