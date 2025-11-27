@@ -3,18 +3,13 @@
 #include <stdexcept>
 #include <iostream>
 #include <sqlite3.h>
-#include <locale>
-#include <codecvt>
-
-std::string toUtf8(const std::wstring& wstr) {
-    std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-    return converter.to_bytes(wstr);
-}
 
 VectorDAO::VectorDAO(const std::string& dbPath, const std::string& indexPath, int dim)
-    : indexPath(indexPath), dim(dim), index(nullptr), space(nullptr)
+    : indexPath(indexPath), dim(0), index(nullptr), space(nullptr), db(nullptr)
 {
-    if (sqlite3_open(dbPath.c_str(), &db)) {
+    if (dim > 0) this->dim = static_cast<std::size_t>(dim);
+    if (sqlite3_open(dbPath.c_str(), &db) != SQLITE_OK) {
+        if (db) sqlite3_close(db);
         throw std::runtime_error("Cannot open SQLite DB");
     }
 }
@@ -22,7 +17,7 @@ VectorDAO::VectorDAO(const std::string& dbPath, const std::string& indexPath, in
 VectorDAO::~VectorDAO() {
     if (index) delete index;
     if (space) delete space;
-    sqlite3_close(db);
+    if (db) sqlite3_close(db);
 }
 
 bool VectorDAO::addVectorText(int64_t id, const std::string& text) {
@@ -32,11 +27,10 @@ bool VectorDAO::addVectorText(int64_t id, const std::string& text) {
         throw std::runtime_error("Embedding is empty, model did not return vector");
     }
 
-    if (dim <= 0) {
-        dim = static_cast<int>(embedding.size());
-        space = new hnswlib::L2Space(dim);
+    if (dim == 0) {
+        dim = embedding.size();
+        space = new hnswlib::L2Space(static_cast<int>(dim));
         index = new hnswlib::HierarchicalNSW<float>(space, 10000, 16, 200);
-        std::cerr << "DEBUG: Initialized index with dimension = " << dim << std::endl;
     }
 
     if (embedding.size() != dim) {
@@ -71,8 +65,14 @@ bool VectorDAO::saveIndex() {
 }
 
 bool VectorDAO::loadIndex() {
+    if (dim == 0) {
+        throw std::runtime_error("Dimension unknown, cannot initialize space to load index");
+    }
     if (!space) {
-        throw std::runtime_error("Space not initialized, cannot load index");
+        space = new hnswlib::L2Space(static_cast<int>(dim));
+    }
+    if (!index) {
+        index = new hnswlib::HierarchicalNSW<float>(space, 10000, 16, 200);
     }
     index->loadIndex(indexPath, space, 10000);
     return true;
@@ -118,7 +118,8 @@ bool VectorDAO::getMetadata(int64_t indexId, std::string& metadata) {
 
     int rc = sqlite3_step(stmt);
     if (rc == SQLITE_ROW) {
-        metadata = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+        const unsigned char* txt = sqlite3_column_text(stmt, 0);
+        metadata = txt ? reinterpret_cast<const char*>(txt) : std::string();
     }
 
     sqlite3_finalize(stmt);
