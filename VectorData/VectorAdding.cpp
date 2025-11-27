@@ -5,6 +5,7 @@
 #include <sstream>
 #include <string>
 #include <filesystem>
+#include <sqlite3.h>
 
 namespace fs = std::filesystem;
 
@@ -48,9 +49,9 @@ static int64_t getNextIndexId(const std::string& dbPath) {
 
 int main(int argc, char** argv) {
     std::string inputPath;
-    if (argc >= 2) {
+    if (argc >= 2)
         inputPath = argv[1];
-    } else {
+    else {
         std::cout << "Enter full path to the text file to add:\n> ";
         std::getline(std::cin, inputPath);
     }
@@ -67,11 +68,22 @@ int main(int argc, char** argv) {
 
     VectorDAO dao(dbPath.string(), indexBin.string(), -1);
 
+    if (fs::exists(indexBin)) {
+        std::cout << "Loading existing vector index...\n";
+        if (!dao.loadIndex()) {
+            std::cerr << "Failed to load existing index, even though file exists.\n";
+            return 1;
+        }
+    } else {
+        std::cout << "Index does not exist. Creating a new one.\n";
+    }
+
     std::ifstream file(inputPath, std::ios::in | std::ios::binary);
     if (!file.is_open()) {
         std::cerr << "Failed to open file: " << inputPath << std::endl;
         return 1;
     }
+
     std::stringstream buffer;
     buffer << file.rdbuf();
     std::string text = buffer.str();
@@ -109,10 +121,8 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    if (!dao.loadIndex()) {
-        std::cerr << "Failed to load index from: " << indexBin.string() << std::endl;
-        return 1;
-    }
-
+    std::cout << "Vector index updated successfully.\n";
     return 0;
 }
+
+
