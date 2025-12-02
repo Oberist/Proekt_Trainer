@@ -47,6 +47,40 @@ static int64_t getNextIndexId(const std::string& dbPath) {
     return nextId;
 }
 
+static std::string extractField(const std::string& text, const std::string& key) {
+    auto pos = text.find(key);
+    if (pos == std::string::npos) return "";
+    pos += key.size();
+    while (pos < text.size() && (text[pos] == ' ' || text[pos] == ':')) ++pos;
+    size_t end = text.find(" || ", pos);
+    if (end == std::string::npos) end = text.size();
+    std::string val = text.substr(pos, end - pos);
+    while (!val.empty() && (val.front() == ' ')) val.erase(val.begin());
+    while (!val.empty() && (val.back() == ' ')) val.pop_back();
+    return val;
+}
+
+static std::string buildEmbeddingText(const std::string& fullText) {
+    std::string name       = extractField(fullText, "NAME");
+    std::string primary    = extractField(fullText, "PRIMARY");
+    std::string secondary  = extractField(fullText, "SECONDARY");
+    std::string equipment  = extractField(fullText, "EQUIPMENT");
+    std::string type       = extractField(fullText, "TYPE");
+    std::string difficulty = extractField(fullText, "DIFFICULTY");
+
+    std::ostringstream oss;
+    bool first = true;
+    if (!name.empty())       { if (!first) oss << " || "; oss << "NAME: " << name; first = false; }
+    if (!primary.empty())    { if (!first) oss << " || "; oss << "PRIMARY: " << primary; first = false; }
+    if (!secondary.empty())  { if (!first) oss << " || "; oss << "SECONDARY: " << secondary; first = false; }
+    if (!equipment.empty())  { if (!first) oss << " || "; oss << "EQUIPMENT: " << equipment; first = false; }
+    if (!type.empty())       { if (!first) oss << " || "; oss << "TYPE: " << type; first = false; }
+    if (!difficulty.empty()) { if (!first) oss << " || "; oss << "DIFFICULTY: " << difficulty; }
+
+    std::string compact = oss.str();
+    return compact.empty() ? fullText : compact;
+}
+
 int main(int argc, char** argv) {
     std::string inputPath;
     if (argc >= 2)
@@ -94,6 +128,8 @@ int main(int argc, char** argv) {
         return 1;
     }
 
+    std::string embeddingText = buildEmbeddingText(text);
+
     int64_t newId = 0;
     try {
         newId = getNextIndexId(dbPath.string());
@@ -103,7 +139,7 @@ int main(int argc, char** argv) {
     }
 
     try {
-        if (!dao.addVectorText(newId, text)) {
+        if (!dao.addVectorText(newId, embeddingText)) {
             std::cerr << "Failed to add text to index." << std::endl;
             return 1;
         }
